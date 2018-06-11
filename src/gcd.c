@@ -16,7 +16,7 @@ unsigned int binary_gcd_itr(unsigned int x, unsigned int y){
 
 
 int main(){
-  int i, j, c;
+  unsigned int i, j, c;
 
 
   c = 0;

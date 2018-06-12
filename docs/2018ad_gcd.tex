@@ -73,10 +73,10 @@
 今日のメッセージ
 \begin{itemize}
 \item \textbf{アルゴリズム $\approx$ 早く止まる漸化式}
-\item \textbf{計算時間はオーダーで評価する}
-\item \textbf{最大公約数は時間計算量$O(n^2)$で計算できる}
+%\item \textbf{計算時間はオーダーで評価する}
 \item \textbf{漸化式は「1」でなくて「0」で止める}
 \item 漸化式の中の条件の数は減らす
+\item \textbf{最大公約数は時間計算量$O(n^2)$で計算できる}
 \end{itemize}
 
 \noindent
@@ -96,16 +96,18 @@
 \noindent
 今日の演習時間のワークフロー
 \begin{enumerate}
-\item GitHub のアカウントを取得する
-\item a
-\item 課題に取り組む
+\item GitHub のアカウントを取得し、Google Form で情報を送る(配布資料参照)
+\item \url{https://github.com/alg2018/} にアクセスし、\texttt{Algorithms--Datastructures}の「プログラミング演習のルール」を読む
+\item \url{https://github.com/alg2018/} にアクセスし、\texttt{GCD}にある課題に取り組む
+\item プログラムを紙に書いて教員かTAに提出
+\item \texttt{Algorithms--Datastructures/docs/git.pdf} を見て、\texttt{git}の使い方を覚える(来週以降に\texttt{git}を使用する)
 \end{enumerate}
 
 \section{アルゴリズムとは}
 
 \section{ユークリッドの互除法}
 自然数$x$と$y$の最大公約数(greatest common divisor; GCD) をもとめる問題を考えよう。
-おそらくみんな知っているユークリッドの互除法という「方法」がある。
+おそらくみんな知っているユークリッドの互除法という「アルゴリズム」がある。
 ユークリッドの互除法は次の等式に基づく。
 
 \begin{equation}
@@ -115,13 +117,15 @@ x,& \text{if } x = y\\
 \mathrm{gcd}(x, y-x),& \text{if } x \le y\\
 \mathrm{gcd}(x-y, y),& \text{otherwise.}
 \end{cases}
+\label{eq:gcd1}
 \end{equation}
 この等式が正しいことは $x\le y$ のとき、$(r\mid x) \land (r\mid y) \iff (r\mid x) \land (r\mid y-x)$から明らか。
 上記の等式は任意の自然数$x$と$y$について$\mathrm{gcd}(x, y)$の値を一意に定める。
 例えば$x=6, y=15$ の場合、$\mathrm{gcd}(6, 15) = \mathrm{gcd}(6, 9) = \mathrm{gcd}(6, 3) = \mathrm{gcd}(3, 3) = 3$ と最大公約数が定まる。
 このように、上記の等式を繰り返し適用(左辺を右辺で置き換える)していくと\textbf{必ず停止する}。
 このような等式のことを「\textbf{漸化式}」と呼ぶことにしよう。
-漸化式に基づいて自然とアルゴリズムが設計できる。
+\textbf{漸化式はそのままアルゴリズムになる}(効率がいいかどうかは別として)。
+漸化式を立てると自然とアルゴリズムが設計できる訳である。
 
 次にこのアルゴリズムの実行時間を考えてみよう。
 アルゴリズムの実行時間は基本的に「漸化式を適用する回数$\times$1回の漸化式の適用にかかる時間」で評価できる。
@@ -232,6 +236,8 @@ $\log_\phi \sqrt{5} \approx 1.6723$ なので、$\lceil\log_\phi (1+x)\rceil$ �
 %と$n/\log \phi \approx 1.44042\, n$と漸化式の適用回数を入力長$n$の関数で上から抑えることができる。
 と漸化式の適用回数を入力長$n$の関数で上から抑えることができる。
 要は\textbf{入力長に比例した回数しか漸化式を適用する必要はない}。
+引き算で計算する\eqref{eq:gcd1}は最悪$y$回漸化式を適用する必要があった。
+よって漸化式\eqref{eq:gcd1}より、漸化式\eqref{eq:gcd2}--\eqref{eq:gcd4}の方が効率的なアルゴリズムを与える。
 
 次に一回の漸化式の適用に必要な計算時間を考える。
 一回の漸化式\eqref{eq:gcd4}の適用には$x$が0かどうかのチェックと$y\,\%\,x$の計算が必要である。
@@ -294,7 +300,7 @@ unsigned int Euclidean_gcd_itr(unsigned int x, unsigned int y){
 
 今日の演習課題
 \begin{enumerate}
-\item 上記のプログラムを \texttt{gcd.c} に書き写せ。
+\item 上記のプログラムを \texttt{gcd.c} に書き写せ。コンパイルして実行せよ。出力される値はランダムな10000以下の自然数が互いに素になる確率である。これは$\frac6{\pi^2}\approx 0.6079$に近いはずである。
 \item Binary GCD を再帰で実装せよ(通常のユークリッドの互除法よりも遅くなるのでがっかりしないこと)。
 \item {[発展的課題]} Binary GCD を再帰を使わないで反復を使って実装せよ。一般的なC言語のコンパイラ(\texttt{gcc}, \texttt{clang}など)では関数\texttt{\_\_builtin\_ctz(x)}が使用できる。
 これは \texttt{int} 型の \texttt{x}について \texttt{x} の二進数表現の最下位ビットから連続する 0 の個数を返す関数である。
